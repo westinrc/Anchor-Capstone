@@ -1,8 +1,9 @@
 # Anchor-Capstone
 
-Capstone project for authors:
-Westin Christensen
-Dhalton Huber
-Karl Noss
-Tori Ottenheimer
-Andreas Regus
+
+# Authors
+Westin Christensen </br>
+Dhalton Huber </br>
+Karl Noss </br>
+Tori Ottenheimer </br>
+Andreas Regus </br>
