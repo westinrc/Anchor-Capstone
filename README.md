@@ -47,7 +47,7 @@ $ virtualenv venv
 Now the virtualenv has been created in that directory and you need to simply activate and deactivate as needed when running the project.
 To activate on MacOS X or Linux do the following:
 ```
-$ venv/bin/activate
+$ source venv/bin/activate
 ```
 To activate on Windows:
 ```
