@@ -4,7 +4,7 @@
 
 * [Getting Started](#getting-started)
     1. [Installing pip](#installing-pip)
-    1. [Installing Virtual Machine](#installing-a-virtual-machine)
+    1. [Installing Virtual Environment](#installing-a-virtual-environment)
 * [Versioning](#versioning)
 * [Authors](#authors)
 * [License](#license)
@@ -31,7 +31,7 @@ python --version
 
 If no version is returned then use online resources to install python onto your machine.
 
-### Installing a virtual machine
+### Installing a virtual environment
 
 When running projects locally you will need to ensure that your machine version of python is not being changed, MacOS 10.11 will give errors indicating that you are not able to change the version on your machine. Thus we can get around this issue by installing a "Virtual Environment" (virtualenv) that your machine can use for a specified directory. The folowing will walk you through the install and setup process.
 
