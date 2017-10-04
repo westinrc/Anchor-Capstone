@@ -76,7 +76,7 @@ deactivate
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. 
+We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
