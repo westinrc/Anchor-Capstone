@@ -11,13 +11,13 @@ from collections import defaultdict, namedtuple
 import os
 
 def randomString(length=16):
-	return "".join([random.choice(string.ascii_letters) for _ in range(length)])
+	return "".join([random.choice(string.letters) for _ in xrange(length)])
 
 def token(disp, repr):
     return {'disp':disp, 'repr':repr}
 
 def randomText(length=30):
-    return " ".join([random.choice(words) for _ in range(length)])
+    return " ".join([random.choice(words) for _ in xrange(length)])
 
 def remove_prefix(w):
     if '_' in w:
@@ -41,13 +41,13 @@ def randomPatient():
     ChiefComplaint = pat['ChiefComplaint'] = randomText(2)
     TriageAssessment = pat['TriageAssessment'] = randomText(10)
     MDcomments = pat['MDcomments'] = randomText(50)
-    Age = pat['Age'] = str(np.random.choice(range(20,80)))
+    Age = pat['Age'] = str(np.random.choice(xrange(20,80)))
     Sex = pat['Sex'] = np.random.choice(['M', 'F'])[0]
     return {'visit':pat}
 
 def generate(n=0):
     xml_str = ""
-    for _ in range(n):
+    for _ in xrange(n):
         pat = randomPatient()
         xml = dicttoxml(pat, attr_type=False, root=False)
         dom = parseString(xml)
