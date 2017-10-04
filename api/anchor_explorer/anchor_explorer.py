@@ -1,6 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, Response, jsonify
 from redis import Redis
-from ..utils.random_patient_generation import generate
+from utils.random_patient_generation import generate
+import json
 
 app = Flask('anchor_explorer')
 redis = Redis(host='redis', port=6379)
@@ -9,11 +10,12 @@ redis = Redis(host='redis', port=6379)
 def example():
     return "Hello this is an example"
 
-@app.route('/generate-random-patients', methods='POST')
+@app.route('/generate-random-patients', methods=['POST'])
 def generate_random_patients():
-    number_patients = request.data['number_patients']
+    request_json = request.get_json(force=True)
+    number_patients = request_json['number_patients']
     patients_xml = generate(number_patients)
-    return patients_xml
+    return Response(patients_xml, mimetype='text/xml')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
