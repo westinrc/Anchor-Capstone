@@ -7,3 +7,12 @@ services:
       - "5000:5000"
   redis:
     image: "redis:alpine"
+
+  devdb:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=dev_db
+    ports:
+      - 5433:5432
