@@ -4,7 +4,7 @@ from utils.random_patient_generation import generate
 from utils.settings_update import update_settings
 import sys
 import json
-from mysql.connector import (connection)
+import pymysql
 
 app = Flask('anchor_explorer')
 redis = Redis(host='redis', port=6379)
@@ -28,9 +28,7 @@ def settings_update():
 
 @app.route('/test-database', methods=['GET'])
 def test_db_connection():
-    cnx = connection.MySQLConnection(user='root', password='Capstone_Password',
-                              host='127.0.0.1',
-                              database='capstone_DB')
+    conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
     return "Success!"
 
 if __name__ == '__main__':
