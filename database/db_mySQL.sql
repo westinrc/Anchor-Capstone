@@ -46,7 +46,7 @@ CREATE TABLE `visit` (
   `MDcomments` varchar(240) DEFAULT NULL,
   `Age` int(11) DEFAULT NULL,
   `Sex` varchar(4) DEFAULT NULL,
-  `ChiefComplainr` varchar(120) DEFAULT NULL,
+  `ChiefComplaint` varchar(120) DEFAULT NULL,
   `TriageAssessment` varchar(240) DEFAULT NULL,
   PRIMARY KEY (`index`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
