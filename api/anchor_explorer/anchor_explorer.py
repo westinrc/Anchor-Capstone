@@ -1,13 +1,14 @@
 from flask import Flask, request, Response, jsonify
-from redis import Redis
+#from redis import Redis
 from utils.random_patient_generation import generate
 from utils.settings_update import update_settings
+from utils.database_test import upload_pitt_data
 import sys
 import json
 import pymysql
 
 app = Flask('anchor_explorer')
-redis = Redis(host='redis', port=6379)
+#redis = Redis(host='redis', port=6379)
 
 @app.route('/example', methods=['GET'])
 def example():
@@ -28,8 +29,8 @@ def settings_update():
 
 @app.route('/test-database', methods=['GET'])
 def test_db_connection():
-    conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
-    return "Success!"
+    result = upload_pitt_data()
+    return result
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
