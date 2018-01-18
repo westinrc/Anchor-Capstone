@@ -6,12 +6,8 @@ from utils.db_func import upload_pitt_data
 import sys
 import json
 import pymysql
-import os
-
-UPLOAD_FOLDER = os.getcwd() + "/uploads"
 
 app = Flask('anchor_explorer')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #redis = Redis(host='redis', port=6379)
 
 @app.route('/example', methods=['GET'])
