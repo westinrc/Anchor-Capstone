@@ -6,8 +6,12 @@ from utils.db_func import upload_pitt_data
 import sys
 import json
 import pymysql
+import os
+
+UPLOAD_FOLDER = os.getcwd() + "/uploads"
 
 app = Flask('anchor_explorer')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #redis = Redis(host='redis', port=6379)
 
 @app.route('/example', methods=['GET'])
@@ -27,10 +31,11 @@ def settings_update():
     settings = update_settings(str(settings))
     return settings
 
-@app.route('/test-database', methods=['GET'])
+@app.route('/upload-pitt-delimited', methods=['POST'])
 def fill_database():
-    upload_pitt_data()
-    return "Success"
+    pitt_file = request.files.get('pitt-delimited')
+    result = upload_pitt_data(pitt_file)
+    return result
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

@@ -12,6 +12,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
+-- Schema capstone_DB
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `capstone_DB` DEFAULT CHARACTER SET latin1 ;
+USE `capstone_DB` ;
+
+-- -----------------------------------------------------
 -- Table `ICD_9`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `ICD_9` ;
@@ -30,7 +36,8 @@ DROP TABLE IF EXISTS `visit` ;
 
 CREATE TABLE IF NOT EXISTS `visit` (
   `index` VARCHAR(120) NOT NULL,
-  `MDcomments` VARCHAR(240) NULL DEFAULT NULL,
+  `primary_ICD_9` VARCHAR(45) NULL DEFAULT NULL,
+  `MDcomments` LONGTEXT NULL DEFAULT NULL,
   `Age` INT(11) NULL DEFAULT NULL,
   `Sex` VARCHAR(4) NULL DEFAULT NULL,
   `ChiefComplaint` VARCHAR(120) NULL DEFAULT NULL,
