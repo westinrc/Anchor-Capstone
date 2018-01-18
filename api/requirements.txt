@@ -3,3 +3,4 @@ redis>=2.10.*
 dicttoxml>=1.7.*
 numpy>=1.13.*
 scipy>=1.0.*
+PyMySQL==0.8.0

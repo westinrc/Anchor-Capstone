@@ -7,14 +7,6 @@ services:
       - ./api:/code
     ports:
       - "5000:5000"
+    network_mode: "host"
   redis:
     image: "redis:alpine"
-
-  devdb:
-    image: postgres:9.6
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=dev_db
-    ports:
-      - 5433:5432
