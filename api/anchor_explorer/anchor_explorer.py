@@ -2,7 +2,7 @@ from flask import Flask, request, Response, jsonify
 #from redis import Redis
 from utils.random_patient_generation import generate
 from utils.settings_update import update_settings
-from utils.database_test import upload_pitt_data
+from utils.db_func import upload_pitt_data
 import sys
 import json
 import pymysql
@@ -28,9 +28,9 @@ def settings_update():
     return settings
 
 @app.route('/test-database', methods=['GET'])
-def test_db_connection():
-    result = upload_pitt_data()
-    return result
+def fill_database():
+    upload_pitt_data()
+    return "Success"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
