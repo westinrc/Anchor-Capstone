@@ -9,19 +9,16 @@ def upload_pitt_data(pitt_file):
 
     if pitt_file is not None:
         for line in pitt_file:
-            #TODO: figure out which information is which and where it should go, then store
-            # in the table
             split_parts = line.split("|")
             current_index = int(split_parts[0])
 
-            visit_sql = "INSERT INTO visit (`index`, primary_ICD_9, MDComments, Age, Sex, ChiefComplaint, TriageAssessment) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            visit_sql = "INSERT INTO visit (`index`, primary_ICD_9, note_type, chief_complaint, note_text, date) VALUES (%s, %s, %s, %s, %s, %s)"
             primary_icd_9 = split_parts[4]
-            md_comments = split_parts[7]
+            note_type = split_parts[2]
             chief_complaint = split_parts[3]
-            cursor.execute(visit_sql, (current_index, primary_icd_9, md_comments, 25, "M", chief_complaint, "here"))
-
-            patient_sql = "INSERT INTO patient (`index`, firstName, lastName, DOB) VALUES (%s, %s, %s, %s)"
-            cursor.execute(patient_sql, (current_index, "Just want", "to get something done", "1995-11-16 00:00:00"))
+            note_text = split_parts[7]
+            date = split_parts[6]
+            cursor.execute(visit_sql, (current_index, primary_icd_9, note_type, chief_complaint, note_text, date))
         
             icd_9_codes = split_parts[5]
             icd_9_split = icd_9_codes.split(",")
