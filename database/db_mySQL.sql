@@ -12,6 +12,12 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
+-- Schema capstone_DB
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `capstone_DB` DEFAULT CHARACTER SET latin1 ;
+USE `capstone_DB` ;
+
+-- -----------------------------------------------------
 -- Table `ICD_9`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `ICD_9` ;
@@ -30,11 +36,11 @@ DROP TABLE IF EXISTS `visit` ;
 
 CREATE TABLE IF NOT EXISTS `visit` (
   `index` VARCHAR(120) NOT NULL,
-  `MDcomments` VARCHAR(240) NULL DEFAULT NULL,
-  `Age` INT(11) NULL DEFAULT NULL,
-  `Sex` VARCHAR(4) NULL DEFAULT NULL,
-  `ChiefComplaint` VARCHAR(120) NULL DEFAULT NULL,
-  `TriageAssessment` VARCHAR(240) NULL DEFAULT NULL,
+  `primary_ICD_9` VARCHAR(45) NULL DEFAULT NULL,
+  `note_type` VARCHAR(45) NULL DEFAULT NULL,
+  `chief_complaint` VARCHAR(120) NULL DEFAULT NULL,
+  `note_text` LONGTEXT NULL DEFAULT NULL,
+  `date` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`index`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -58,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
