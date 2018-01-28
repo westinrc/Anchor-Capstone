@@ -3,6 +3,7 @@ from flask import Flask, request, Response, jsonify
 from utils.random_patient_generation import generate
 from utils.settings_update import update_settings
 from utils.db_func import upload_pitt_data
+from utils.db_func import load_icd9_structure
 import sys
 import json
 import pymysql
@@ -32,6 +33,11 @@ def fill_database():
     pitt_file = request.files.get('pitt-delimited')
     result = upload_pitt_data(pitt_file)
     return result
+
+@app.route('/load-icd9-structure', methods=['POST'])
+def load_icd9_struct():
+    load_icd9_structure()
+    return "Success"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
