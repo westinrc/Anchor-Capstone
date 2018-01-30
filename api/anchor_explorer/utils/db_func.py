@@ -3,6 +3,11 @@ import os
 import sys
 import subprocess
 import string
+sys.path.append("..")
+from models.visit import Visit
+from models.secondary_icd9 import Secondary_ICD_9
+from models.code_names import Code_Names
+from models.code_edges import Code_Edges
 
 conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
 cursor = conn.cursor()
@@ -13,24 +18,24 @@ def upload_pitt_data(pitt_file):
     if pitt_file is not None:
         for line in pitt_file:
             split_parts = line.split("|")
-            current_index = int(split_parts[0])
 
-            visit_sql = "INSERT INTO visit (`index`, primary_ICD_9, note_type, chief_complaint, note_text, date) VALUES (%s, %s, %s, %s, %s, %s)"
+            current_index = int(split_parts[0])
             primary_icd_9 = split_parts[4]
             note_type = split_parts[2]
             chief_complaint = split_parts[3]
             note_text = split_parts[7]
             date = split_parts[6]
-            cursor.execute(visit_sql, (current_index, primary_icd_9, note_type, chief_complaint, note_text, date))
+
+            new_visit = Visit(current_index, primary_icd_9, note_type, chief_complaint, note_text, date)
+            new_visit.store()
         
             icd_9_codes = split_parts[5]
             icd_9_split = icd_9_codes.split(",")
             for code in icd_9_split:
                 if code != '':
-                    icd_9_sql = "INSERT INTO ICD_9 (`index`, code) VALUES (%s, %s)"
-                    cursor.execute(icd_9_sql, (current_index, code))
+                    new_secondary_icd_9_entry = Secondary_ICD_9(current_index, code)
+                    new_secondary_icd_9_entry.store()
 
-            conn.commit()
             current_index = current_index + 1
         return "Success!"
     else:
@@ -43,19 +48,15 @@ def sanitize(txt):
     return txt
 
 def traverse(t):
-    #print>>outfile, sanitize(t.code+'\t'+t.description)
-    sql = "INSERT INTO code_names (code, name) VALUES (%s, %s)"
-    cursor.execute(sql, (t.code, t.description))
-    conn.commit()
+    new_code_names_entry = Code_Names(t.code, t.description)
+    new_code_names_entry.store()
     for c in t.children:
         traverse(c)
 
 def getEdges(t):
     for c in t.children:
-        #print >>outfile, sanitize(t.code+'\t'+c.code)
-        sql = "INSERT INTO code_edges (code, edge) VALUES (%s, %s)"
-        cursor.execute(sql, (t.code, c.code))
-        conn.commit()
+        new_code_edges_entry = Code_Edges(t.code, c.code)
+        new_code_edges_entry.store()
         getEdges(c)
 
 def load_icd9_structure():
