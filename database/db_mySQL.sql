@@ -10,6 +10,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema capstone_DB
 -- -----------------------------------------------------
+DROP SCHEMA IF EXISTS `capstone_DB` ;
 
 -- -----------------------------------------------------
 -- Schema capstone_DB
@@ -25,6 +26,30 @@ DROP TABLE IF EXISTS `ICD_9` ;
 CREATE TABLE IF NOT EXISTS `ICD_9` (
   `index` VARCHAR(120) NOT NULL,
   `code` VARCHAR(45) NULL DEFAULT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `code_edges`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `code_edges` ;
+
+CREATE TABLE IF NOT EXISTS `code_edges` (
+  `code` VARCHAR(45) NOT NULL,
+  `edge` VARCHAR(120) NOT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `code_names`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `code_names` ;
+
+CREATE TABLE IF NOT EXISTS `code_names` (
+  `code` VARCHAR(45) NOT NULL,
+  `name` MEDIUMTEXT NOT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
