@@ -2,8 +2,9 @@ from flask import Flask, request, Response, jsonify
 #from redis import Redis
 from utils.random_patient_generation import generate
 from utils.settings_update import update_settings
-from utils.db_func import upload_pitt_data
-from utils.db_func import load_icd9_structure
+from utils.data_storage import upload_pitt_data
+from utils.data_storage import load_icd9_structure
+from utils.data_storage import build_structured_rep
 import sys
 import json
 import pymysql
@@ -37,6 +38,13 @@ def fill_database():
 @app.route('/load-icd9-structure', methods=['POST'])
 def load_icd9_struct():
     load_icd9_structure()
+    return "Success"
+
+@app.route('/build-structured-rep', methods=['POST'])
+def build_rep():
+    request_json = request.get_json(force=True)
+    data_type = request_json['datatype']
+    build_structured_rep(data_type)
     return "Success"
 
 if __name__ == '__main__':

@@ -4,3 +4,4 @@ dicttoxml>=1.7.*
 numpy>=1.13.*
 scipy>=1.0.*
 PyMySQL==0.8.0
+networkx>=1.0.*
