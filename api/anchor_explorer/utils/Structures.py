@@ -11,7 +11,7 @@ class Structure(object):
     def getStructure(self):
         nodes = []
         for n in nx.dfs_preorder_nodes(self.structure, self.root):
-            p = self.structure.in_edges(n)
+            p = list(self.structure.in_edges(n))
             if len(p) == 0:
                 p = ""
             else:
@@ -24,7 +24,7 @@ class Structure(object):
         edges = []
         names = []
         for n in nx.dfs_preorder_nodes(self.structure, root):
-            p = self.structure.in_edges(n)
+            p = list(self.structure.in_edges(n))
             if len(p) == 0:
                 p = ""
             else:
