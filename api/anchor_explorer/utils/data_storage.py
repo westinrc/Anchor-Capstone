@@ -3,6 +3,10 @@ import os
 import sys
 import subprocess
 import string
+import networkx as nx
+import cPickle as pickle
+import re
+from Structures import Structure
 sys.path.append("..")
 from models.visit import Visit
 from models.secondary_icd9 import Secondary_ICD_9
@@ -13,8 +17,6 @@ conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password'
 cursor = conn.cursor()
 
 def upload_pitt_data(pitt_file):
-    
-
     if pitt_file is not None:
         for line in pitt_file:
             split_parts = line.split("|")
@@ -68,10 +70,62 @@ def load_icd9_structure():
 
     tree = ICD9('icd9/codes.json')
     toplevelnodes = tree.children
+    current_names_index = 1
+    current_edges_index = 1
 
     traverse(tree)
 
     getEdges(tree)
+
+
+def build_structured_rep(data_type):
+    # try:
+    #     datatype = sys.argv[1]
+    #     names = sys.argv[2]+'.names'
+    #     edges = sys.argv[2]+'.edges'
+    # except:
+    #     print "usage: python build_structured_rep.py type src"
+    #     sys.exit()
+    
+
+    try:
+        os.makedirs('Structures')
+    except:
+        pass
+
+    print 'building a structured representation of', data_type
+    print 'assuming prefix', data_type+'_'
+    prefix = data_type+'_'
+
+    
+    nameDict = {}
+    name_count = Code_Names.get_count()
+    name_obj = Code_Names(None, None)
+    for i in range(1, name_count + 1):
+        name_obj.get_data(i)
+        code = name_obj.code
+        name = name_obj.name
+        code = prefix+code
+        nameDict[code] = name
+
+    #f = file(edges)
+    graph = nx.DiGraph()
+
+    for code,name in nameDict.items():
+        graph.add_node(code, name=name)
+
+    edge_count = Code_Edges.get_count()
+    edge_obj = Code_Edges(None, None)
+    for i in range(1, edge_count + 1):
+        edge_obj.get_data(i)
+        parent = edge_obj.code
+        child = edge_obj.edge
+        graph.add_edge(prefix+parent, prefix+child)
+
+    struct = Structure(graph, prefix+'ROOT')
+    struct.getStructure()
+    pickle.dump(struct, file('Structures/'+data_type+'Struct.pk', 'w'))
+    pickle.dump(nameDict, file('Structures/'+data_type+'Dict.pk', 'w'))
 
 #Used for development
 def clear_tables():
