@@ -1,5 +1,4 @@
 from flask import Flask, request, Response, jsonify
-#from redis import Redis
 from utils.random_patient_generation import generate
 from utils.settings_update import update_settings
 from utils.data_storage import upload_pitt_data
