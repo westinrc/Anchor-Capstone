@@ -6,26 +6,26 @@ class Filters extends Component {
 		return (
 			<div className='panel panel-default panel-custom'>
 				<div className='panel-heading text-left'>
-					<h2 className='no-margin'>Filters</h2>
+					<h3 className='no-margin'>Filters</h3>
 				</div>
 				<div className='panel-body text-left'>
 					<div className='radio no-margin'>
-						<label className='radio'>
-							<input type='radio' name='filterRadios' id='viewNotAnchored' value='viewNotAnchored'></input>
+						<label className='radio no-margin'>
+							<input type='radio' className='no-margin' name='filterRadios' id='viewNotAnchored' value='viewNotAnchored'></input>
 							View Not Anchored
-					</label>
+						</label>
 						<label className='radio'>
 							<input type='radio' name='filterRadios' id='viewAllAnchored' value='viewAllAnchored'></input>
 							View All Anchored
-					</label>
+						</label>
 						<label className='radio'>
 							<input type='radio' name='filterRadios' id='viewSelectedAnchored' value='viewSelectedAnchored'></input>
 							View Selected Anchored
-					</label>
+						</label>
 						<label className='radio'>
 							<input type='radio' name='filterRadios' id='viewRecentlyAnchored' value='viewRecentlyAnchored'></input>
 							View Recently Anchored
-					</label>
+						</label>
 					</div>
 				</div>
 			</div>

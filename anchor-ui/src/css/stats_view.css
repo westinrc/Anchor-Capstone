@@ -1,0 +1,13 @@
+.rotate-text {
+	transform: rotate(90deg);
+}
+
+.stats {
+	display: flex;
+	margin-top: -20.4em;
+	position: fixed;
+	right: -2.0em;
+	top: 50%;
+	width: 80px;
+	z-index: 1000;
+}
