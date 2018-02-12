@@ -57,5 +57,3 @@ class App extends Component {
 	}
 }
 export default App;
-
-// REACT BASIC EXAMPLE: http://moviee.surge.sh/
