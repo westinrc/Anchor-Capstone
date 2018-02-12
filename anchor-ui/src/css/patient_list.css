@@ -1,0 +1,8 @@
+.fixed-panel-list {
+	height: 200px;
+	overflow-y: scroll;
+}
+
+.table.table-hover {
+	margin-bottom: 0;
+}
