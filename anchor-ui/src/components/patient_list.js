@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
+import PatientRow from './patient_row';
 import '../css/patient_list.css';
 
 class PatientList extends Component {
+	constructor() {
+		super();
+		this.state = {
+			patients: [
+				{ num: 1, age: 23, sex: 'M', name: 'Westin Christensen'},
+				{ num: 2, age: 21, sex: 'F', name: 'Tori Ottenheimer'},
+				{ num: 3, age: 26, sex: 'F', name: 'Alli Jacobson'},
+				{ num: 4, age: 19, sex: 'M', name: 'Cadin Christensen'},
+				{ num: 5, age: 18, sex: 'F', name: 'Jessie Christensen'},
+				{ num: 6, age: 22, sex: 'F', name: 'Megan Jacobson'}
+			]
+		};
+	}
 	render() {
 		return (
 			<div className='panel panel-default'>
@@ -19,36 +33,7 @@ class PatientList extends Component {
 							</tr>
 						</thead>
 						<tbody>
-							<tr className='text-left'>
-								<td>1</td>
-								<td>13</td>
-								<td>M</td>
-								<td>Westin Christensen</td>
-							</tr>
-							<tr className='text-left'>
-								<td>2</td>
-								<td>18</td>
-								<td>F</td>
-								<td>Tori Ottenheimer</td>
-							</tr>
-							<tr className='text-left'>
-								<td>3</td>
-								<td>23</td>
-								<td>M</td>
-								<td>Cadin Christensen</td>
-							</tr>
-							<tr className='text-left'>
-								<td>3</td>
-								<td>23</td>
-								<td>M</td>
-								<td>Cadin Christensen</td>
-							</tr>
-							<tr className='text-left'>
-								<td>3</td>
-								<td>23</td>
-								<td>M</td>
-								<td>Cadin Christensen</td>
-							</tr>
+							{this.state.patients.map((val, index) => <PatientRow key={index} patient={val}></PatientRow>)}
 						</tbody>
 					</table>
 				</div>
