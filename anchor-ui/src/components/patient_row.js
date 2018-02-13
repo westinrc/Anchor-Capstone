@@ -5,10 +5,10 @@ class PatientRow extends Component {
 	render() {
 		return (
 			<tr className='text-left'>
-				<td>{this.props.patient.num}</td>
-				<td>{this.props.patient.age}</td>
-				<td>{this.props.patient.sex}</td>
-				<td>{this.props.patient.name}</td>
+				<td className='col-md-1'>{this.props.patient.num}</td>
+				<td className='col-md-1'>{this.props.patient.age}</td>
+				<td className='col-md-1'>{this.props.patient.sex}</td>
+				<td className='col-md-9'>{this.props.patient.name}</td>
 			</tr>
 		);
 	}

@@ -29,7 +29,7 @@ class PatientList extends Component {
 								<th className='col-md-1'>#</th>
 								<th className='col-md-1'>Age</th>
 								<th className='col-md-1'>Sex</th>
-								<th>Name</th>
+								<th className='col-md-9'>Name</th>
 							</tr>
 						</thead>
 						<tbody>
