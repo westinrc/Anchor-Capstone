@@ -12,12 +12,10 @@ class PatientView extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		console.log(JSON.stringify(nextProps));
-		console.log('almost');
 		this.setState({
 			jokesReceived: nextProps.passingJokeToChild
 		}, () => {
 			this.state.jokesReceived.map((joke) => {
-				console.log('updating');
 				this.setState({
 					result: this.state.result + joke + '\n'
 				});
