@@ -9,12 +9,18 @@ import PatientList from './components/patient_list';
 import PatientView from './components/patient_view';
 import CurrentAnchors from './components/current_anchors';
 import StatsView from './components/stats_view';
+// import CohortModal from './components/modals/cohort_modal';
 
 class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			jokesArr: [],
+			anchoredPatientsCount: 0,
+			currentCohort: 'none',
+			markedPatientCount: 0,
+			selectedAnchor: 'none',
+			selectedPatient: 'none',
+			jokesArr: []
 		};
 		this.searchCallBack = this.searchCallBack.bind(this);
 	}
@@ -51,6 +57,7 @@ class App extends Component {
 						</div>
 					</div>
 					<br />
+					{/* <CohortModal show={true}>Here is some content</CohortModal> */}
 				</div>
 			</div>
 		);

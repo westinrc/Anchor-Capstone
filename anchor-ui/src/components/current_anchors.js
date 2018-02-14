@@ -24,9 +24,9 @@ class CurrentAnchors extends Component {
 					</table>
 				</div>
 				<div className='panel-footer'>
-					<div className='btn-group btn-block'>
+					<div className='btn-group'>
 						<button className='btn btn-default'>Remove Anchor</button>
-						<button className='btn btn-default'>Add Anchor</button>
+						{/* <button className='btn btn-default'>Add Anchor</button> */}
 					</div>
 				</div>
 			</div>

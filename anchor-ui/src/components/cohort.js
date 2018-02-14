@@ -24,7 +24,10 @@ class Cohort extends Component {
 					</table>
 				</div>
 				<div className='panel-footer'>
-					<button className='btn btn-default btn-block'>Add New Cohort</button>
+					<div className='btn-group btn-block'>
+						<button className='btn btn-default'>Remove Cohort</button>
+						<button className='btn btn-default'>Add Cohort</button>	
+					</div>
 				</div>
 			</div>
 		);

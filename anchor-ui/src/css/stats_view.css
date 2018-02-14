@@ -1,3 +1,7 @@
+.no-padding-left {
+	padding-left: 0;
+}
+
 .rotate-text {
 	transform: rotate(90deg);
 }

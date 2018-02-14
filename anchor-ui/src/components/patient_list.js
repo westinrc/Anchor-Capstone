@@ -26,10 +26,11 @@ class PatientList extends Component {
 					<table className='table table-hover'>
 						<thead>
 							<tr className='text-left'>
-								<th className='col-md-1'>#</th>
-								<th className='col-md-1'>Age</th>
-								<th className='col-md-1'>Sex</th>
-								<th className='col-md-9'>Name</th>
+								<th className='col-md-1 text-center'>#</th>
+								<th className='col-md-2 text-center'>Markings</th>
+								<th className='col-md-1 text-center'>Age</th>
+								<th className='col-md-1 text-center'>Sex</th>
+								<th className='col-md-7'>Name</th>
 							</tr>
 						</thead>
 						<tbody>
