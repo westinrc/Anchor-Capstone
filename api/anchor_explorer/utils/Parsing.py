@@ -98,6 +98,9 @@ try:
 except:
     bigramlist = []
 
+def get_bigramlist():
+    return bigramlist
+
 def bigrammed(sen):
     sent=' '+sen.lower()+' '
     senlist=sen.split()

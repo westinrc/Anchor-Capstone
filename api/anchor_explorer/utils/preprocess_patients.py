@@ -165,6 +165,7 @@ def preprocess(max_patients):
             anchorwords += concept.text.split('|')
     anchorwords = [z.strip() for z in set(anchorwords)]
 
+    bigramlist = get_bigramlist()
     bigramlist += filter(lambda w: len(w.split()) > 1, anchorwords)
 
     sys.stdout.flush()
