@@ -51,7 +51,8 @@ def build_rep():
 def preprocess_patients():
     request_json = request.get_json(force=True)
     max_patients = request_json['max_patients']
-    preprocess(max_patients)
+    result = preprocess(max_patients)
+    return str(result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

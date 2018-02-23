@@ -11,6 +11,8 @@ from collections import defaultdict, namedtuple
 import xml.etree.ElementTree as ET
 from Parsing import *
 import re
+from models.visit import Visit
+import pprint
 
 def noRepresent(w):
     return False
@@ -65,6 +67,7 @@ def xmlReadVisit(f):
         data.append(l)
     data = "".join(data)
     return shallow_parse_XML(data)
+
 
 class real_patient_generator:
     def __init__(self, src, max_patients):
@@ -130,7 +133,25 @@ def realPatient(pat):
     pat['index'] = ET.fromstring(pat['index']).text
 
     return pat
-    
+
+def create_patient_dict(visit, settings):
+    pat = {}
+    padded_index = visit['index'].zfill(5)
+    pat['index'] = 'vid_' + padded_index
+    for datum in ET.parse(settings).findall('dataTypes/datum'):
+        for field in datum.findall('field'):
+            field_name = field.attrib['name']
+            if not field_name + '_parsed' in pat:
+                pat[field_name + '_parsed'] = []
+
+            if not field_name in pat:
+                pat[field_name] = ''
+                if field_name == 'Note':
+                    pat[field_name] = visit['note_text']
+        lowered_split_text = visit['note_text'].lower().replace('\n', ' ').replace('\\n', ' ').split()
+        pat['Text'] = "|".join(lowered_split_text)
+    return pat
+
 def preprocess(max_patients):
 
     # if sys.argv[1] == 'test':
@@ -181,6 +202,18 @@ def preprocess(max_patients):
     word_index = defaultdict(list)
     patients = []
     pool = Pool(4)
+
+    # ******* NEW CODE ********
+    visit_obj = Visit()
+    all_visits = visit_obj.retrieve_all_visits()
+    x = 0
+    for visit in all_visits:
+        pat = create_patient_dict(visit, settings)
+        # if (x == 1):
+        #     pprint._sorted = lambda x:x
+        #     pprint.pprint(pat)
+        #     return 1
+        x += 1
 
     #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
     for pat in real_patient_generator(src=xml_src, max_patients=max_patients):
