@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 from Parsing import *
 import re
 from models.visit import Visit
+from models.secondary_icd9 import Secondary_ICD_9
 import pprint
 
 def noRepresent(w):
@@ -134,21 +135,62 @@ def realPatient(pat):
 
     return pat
 
-def create_patient_dict(visit, settings):
+
+def build_diagnosis(dictionaries, prefix, visit):
+    visit_index = visit['index']
+    secondary_icd9_codes_obj = Secondary_ICD_9()
+    secondary_icd9_codes = secondary_icd9_codes_obj.retrieve_by_index(visit_index)
+    print(secondary_icd9_codes)
+    diagnoses = []
+    for code_entry in secondary_icd9_codes:
+        dictionary = {}
+        code = code_entry['code']
+        try:
+            dictionary['disp'] = dictionaries[prefix][prefix + code]
+            dictionary['repr'] = prefix + code
+        except:
+            dictionary['disp'] = prefix + code
+            dictionary['repr'] = prefix + code
+        diagnoses.append(dictionary)
+    return diagnoses
+
+
+def create_patient_dict(visit, settings, dictionaries):
     pat = {}
     padded_index = visit['index'].zfill(5)
     pat['index'] = 'vid_' + padded_index
     for datum in ET.parse(settings).findall('dataTypes/datum'):
+        prefix = datum.attrib['prefix']
         for field in datum.findall('field'):
             field_name = field.attrib['name']
-            if not field_name + '_parsed' in pat:
+
+            if (not field_name + '_parsed' in pat):
                 pat[field_name + '_parsed'] = []
 
-            if not field_name in pat:
+            if (not field_name in pat):
                 pat[field_name] = ''
                 if field_name == 'Note':
                     pat[field_name] = visit['note_text']
-        lowered_split_text = visit['note_text'].lower().replace('\n', ' ').replace('\\n', ' ').split()
+
+            if (field_name == 'Diagnosis'):
+                diagnosis_parsed = build_diagnosis(dictionaries, prefix, visit)
+                pat[field_name + '_parsed'] = diagnosis_parsed
+                diagnosis_string = ''
+                for diagnosis in diagnosis_parsed:
+                    diagnosis_string += diagnosis['repr']
+                    diagnosis_string = diagnosis_string.replace('code_', ' ')
+                diagnosis_string = diagnosis_string.lstrip()
+                pat[field_name] = diagnosis_string
+
+        lowered_text = visit['note_text'].lower()
+        remove_chars = ['\n', '\\n', '\t', '\\t']
+        split_chars = ['(', ')', '[', ']', '{', '}', '*', '.', ';', ',', ':', '-', '/']
+        for char in remove_chars:
+            lowered_text = lowered_text.replace(char, ' ')
+        for char in split_chars:
+            lowered_text = lowered_text.replace(char, ' ' + char + ' ')
+ 
+        lowered_split_text = lowered_text.split()
         pat['Text'] = "|".join(lowered_split_text)
     return pat
 
@@ -208,11 +250,11 @@ def preprocess(max_patients):
     all_visits = visit_obj.retrieve_all_visits()
     x = 0
     for visit in all_visits:
-        pat = create_patient_dict(visit, settings)
-        # if (x == 1):
-        #     pprint._sorted = lambda x:x
-        #     pprint.pprint(pat)
-        #     return 1
+        pat = create_patient_dict(visit, settings, dictionaries)
+        if (x == 1):
+            pprint._sorted = lambda x:x
+            pprint.pprint(pat)
+            return 1
         x += 1
 
     #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
