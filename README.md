@@ -117,3 +117,11 @@ pass the max_patients in via a json object i.e.:
 {
     "max_patients": 93422
 }
+
+### DO NOT PUSH THESE FILES
+
+* anchor_explorer > utils > Structures Folder
+* anchor_explorer > ICD9
+* wordshelf.db
+* visitshelf.db
+* visitid
