@@ -1,5 +1,9 @@
 # Anchor-Capstone
 
+## GitHub
+
+[Project Repo](http://github.com/westinrc/Anchor-Capstone)
+
 ## Table of Contents
 
 * [Getting Started](#getting-started)
@@ -87,3 +91,29 @@ We use [SemVer](http://semver.org/) for versioning.
 * [Andreas Regus](https://github.com/aregus) </br>
 
 ## License
+
+## Development Steps
+
+Start The Development Server
+
+```python
+cd api/anchor_explorer
+python anchor_explorer.py
+```
+
+Loading the pitt data
+http://0.0.0.0:[localhost]/upload-pitt-delimited
+body must have form data of file pitt-delimeted (with that name!)
+
+Hit the load-icd9-structure
+http://0.0.0.0:[localhost]/load-icd9-structure
+
+Build the representation (roughly 5min)
+http://0.0.0.0:[localhost]/build-structured-rep
+
+Pre Process Patients
+http://0.0.0.0:[localhost]/preprocess-patients
+pass the max_patients in via a json object i.e.:
+{
+    "max_patients": 93422
+}
