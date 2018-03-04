@@ -1,3 +1,5 @@
 *.pyc
-api/anchor_explorer/icd9/*
+api/anchor_explorer/icd9/
+api/anchor_explorer/structures
 *.DS_Store
+api/anchor_explorer/files

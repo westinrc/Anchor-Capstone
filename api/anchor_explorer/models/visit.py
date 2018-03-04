@@ -1,7 +1,7 @@
 import pymysql
 
 class Visit(object):
-    conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
+    conn = pymysql.connect(host='127.0.0.1', user='capstone', passwd='Capstone_Password', db='capstone_DB')
     cursor = conn.cursor(pymysql.cursors.DictCursor)
 
     def __init__(self, index=None, primary_ICD_9=None, note_type=None, chief_complaint=None, note_text=None, date=None):

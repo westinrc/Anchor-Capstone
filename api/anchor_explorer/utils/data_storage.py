@@ -13,7 +13,7 @@ from models.secondary_icd9 import Secondary_ICD_9
 from models.code_names import Code_Names
 from models.code_edges import Code_Edges
 
-conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
+conn = pymysql.connect(host='127.0.0.1', user='capstone', passwd='Capstone_Password', db='capstone_DB')
 cursor = conn.cursor()
 
 def upload_pitt_data(pitt_file):

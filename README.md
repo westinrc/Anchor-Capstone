@@ -12,6 +12,7 @@
 * [Versioning](#versioning)
 * [Authors](#authors)
 * [License](#license)
+* [Development Steps](#development-steps)
 
 ## Getting Started
 
@@ -98,18 +99,25 @@ Start The Development Server
 
 ```python
 cd api/anchor_explorer
+
 python anchor_explorer.py
 ```
 
-Loading the pitt data
+`localhost is typically 5000`
+
+Loading the pitt data (approx. 5 minutes) [Method : POST]
 http://0.0.0.0:[localhost]/upload-pitt-delimited
 body must have form data of file pitt-delimeted (with that name!)
 
-Hit the load-icd9-structure
+Hit the load-icd9-structure [Method : POST]
 http://0.0.0.0:[localhost]/load-icd9-structure
 
-Build the representation (roughly 5min)
+Build the representation (approx. 5 minutes) [Method : POST]
 http://0.0.0.0:[localhost]/build-structured-rep
+body must have a json object to be passed i.e.:
+{
+    "test": "test"
+}
 
 Pre Process Patients
 http://0.0.0.0:[localhost]/preprocess-patients
@@ -125,3 +133,23 @@ pass the max_patients in via a json object i.e.:
 * wordshelf.db
 * visitshelf.db
 * visitid
+
+### Starting and stopping mysql server locally with brew
+
+```bash
+brew services start mysql
+
+brew servies stop mysql
+```
+
+[Resource for more details on brew services](https://robots.thoughtbot.com/starting-and-stopping-background-services-with-homebrew)
+
+[Resource for more details on writing markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
+### Connecting to mysql
+
+```bash
+mysql -u capstone -p[password]
+```
+
+note that there is no space between the `-p` and password, do not use any brackets when writing the password.

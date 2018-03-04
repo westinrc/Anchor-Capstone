@@ -1,7 +1,7 @@
 import pymysql
 
 class Secondary_ICD_9(object):
-    conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
+    conn = pymysql.connect(host='127.0.0.1', user='capstone', passwd='Capstone_Password', db='capstone_DB')
     cursor = conn.cursor(pymysql.cursors.DictCursor)
 
     def __init__(self, index=None, code=None):
