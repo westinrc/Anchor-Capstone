@@ -103,24 +103,26 @@ cd api/anchor_explorer
 python anchor_explorer.py
 ```
 
-`localhost is typically 5000`
+In order to hit the endpoints you will need to use a program like [Postman](https://www.getpostman.com/)
 
-Loading the pitt data (approx. 5 minutes) [Method : POST]
-http://0.0.0.0:[localhost]/upload-pitt-delimited
-body must have form data of file pitt-delimeted (with that name!)
+`5000 is the typical port, but could differ`
 
-Hit the load-icd9-structure [Method : POST]
-http://0.0.0.0:[localhost]/load-icd9-structure
+Loading the pitt data (approx. 5 minutes) [Method : POST] </br>
+http://0.0.0.0:5000/upload-pitt-delimited </br>
+body must have form datsa of file pitt-delimeted (with that name!)
 
-Build the representation (approx. 5 minutes) [Method : POST]
-http://0.0.0.0:[localhost]/build-structured-rep
+Hit the load-icd9-structure [Method : POST] </br>
+http://0.0.0.0:5000/load-icd9-structure
+
+Build the representation (approx. 5 minutes) [Method : POST] </br>
+http://0.0.0.0:5000/build-structured-rep </br>
 body must have a json object to be passed i.e.:
 {
-    "test": "test"
+    "datatype": "code"
 }
 
-Pre Process Patients
-http://0.0.0.0:[localhost]/preprocess-patients
+Pre Process Patients </br>
+http://0.0.0.0:5000/preprocess-patients </br>
 pass the max_patients in via a json object i.e.:
 {
     "max_patients": 93422
