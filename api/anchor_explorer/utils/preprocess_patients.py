@@ -136,24 +136,27 @@ def realPatient(pat):
     return pat
 
 
-def build_diagnosis(dictionaries, prefix, visit, all_icd9_codes):
+def build_diagnosis(dictionaries, prefix, visit, all_icd9_codes_indexed):
     visit_index = visit['index']
-    secondary_icd9_codes = all_icd9_codes[visit_index]
+    secondary_icd9_codes = all_icd9_codes_indexed[visit_index]
+
     print(secondary_icd9_codes)
+    
     diagnoses = []
-    for code in secondary_icd9_codes['codes']:
-        dictionary = {}
-        try:
-            dictionary['disp'] = dictionaries[prefix][prefix + code]
-            dictionary['repr'] = prefix + code
-        except:
-            dictionary['disp'] = prefix + code
-            dictionary['repr'] = prefix + code
-        diagnoses.append(dictionary)
+    if (secondary_icd9_codes is not None):
+        for code in secondary_icd9_codes['codes']:
+            dictionary = {}
+            try:
+                dictionary['disp'] = dictionaries[prefix][prefix + code]
+                dictionary['repr'] = prefix + code
+            except:
+                dictionary['disp'] = prefix + code
+                dictionary['repr'] = prefix + code
+            diagnoses.append(dictionary)
     return diagnoses
 
 
-def create_patient_dict(visit, settings, dictionaries, all_icd9_codes):
+def create_patient_dict(visit, settings, dictionaries, all_icd9_codes_indexed):
     pat = {}
     padded_index = str(visit['index']).zfill(5)
     pat['index'] = 'vid_' + padded_index
@@ -178,7 +181,7 @@ def create_patient_dict(visit, settings, dictionaries, all_icd9_codes):
 
 
             if (field_name == 'Diagnosis'):
-                diagnosis_parsed = build_diagnosis(dictionaries, prefix, visit, all_icd9_codes)
+                diagnosis_parsed = build_diagnosis(dictionaries, prefix, visit, all_icd9_codes_indexed)
                 pat[field_name + '_parsed'] = diagnosis_parsed
                 diagnosis_string = ''
                 for diagnosis in diagnosis_parsed:
@@ -256,10 +259,14 @@ def preprocess(max_patients):
     secondary_icd9_codes_obj = Secondary_ICD_9()
     all_icd9_codes = secondary_icd9_codes_obj.retrieve_all_ICD_9()
 
+    all_icd9_codes_indexed = [None] * len(all_visits)
+    for icd9_dict in all_icd9_codes:
+        desired_index = icd9_dict['index']
+        all_icd9_codes_indexed[desired_index] = icd9_dict
 
     x = 0
     for visit in all_visits:
-        pat = create_patient_dict(visit, settings, dictionaries, all_icd9_codes)
+        pat = create_patient_dict(visit, settings, dictionaries, all_icd9_codes_indexed)
 
         index = pat['index']
         for w in set(pat['Text'].split('|')):
