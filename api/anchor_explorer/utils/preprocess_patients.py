@@ -136,15 +136,13 @@ def realPatient(pat):
     return pat
 
 
-def build_diagnosis(dictionaries, prefix, visit):
+def build_diagnosis(dictionaries, prefix, visit, all_icd9_codes):
     visit_index = visit['index']
-    secondary_icd9_codes_obj = Secondary_ICD_9()
-    secondary_icd9_codes = secondary_icd9_codes_obj.retrieve_by_index(visit_index)
+    secondary_icd9_codes = all_icd9_codes[visit_index]
     print(secondary_icd9_codes)
     diagnoses = []
-    for code_entry in secondary_icd9_codes:
+    for code in secondary_icd9_codes['codes']:
         dictionary = {}
-        code = code_entry['code']
         try:
             dictionary['disp'] = dictionaries[prefix][prefix + code]
             dictionary['repr'] = prefix + code
@@ -155,9 +153,9 @@ def build_diagnosis(dictionaries, prefix, visit):
     return diagnoses
 
 
-def create_patient_dict(visit, settings, dictionaries):
+def create_patient_dict(visit, settings, dictionaries, all_icd9_codes):
     pat = {}
-    padded_index = visit['index'].zfill(5)
+    padded_index = str(visit['index']).zfill(5)
     pat['index'] = 'vid_' + padded_index
     for datum in ET.parse(settings).findall('dataTypes/datum'):
         prefix = datum.attrib['prefix']
@@ -170,10 +168,17 @@ def create_patient_dict(visit, settings, dictionaries):
             if (not field_name in pat):
                 pat[field_name] = ''
                 if field_name == 'Note':
-                    pat[field_name] = visit['note_text']
+                    note_text = visit['note_text']
+                    pat[field_name] = note_text
+                    remove_chars = ['\n', '\\n', '\t', '\\t']
+                    for char in remove_chars:
+                        note_text = note_text.replace(char, '')
+                    pat_note_parsed = parse_text(note_text, prefix)
+                    pat[field_name + '_parsed'] = pat_note_parsed
+
 
             if (field_name == 'Diagnosis'):
-                diagnosis_parsed = build_diagnosis(dictionaries, prefix, visit)
+                diagnosis_parsed = build_diagnosis(dictionaries, prefix, visit, all_icd9_codes)
                 pat[field_name + '_parsed'] = diagnosis_parsed
                 diagnosis_string = ''
                 for diagnosis in diagnosis_parsed:
@@ -248,33 +253,44 @@ def preprocess(max_patients):
     # ******* NEW CODE ********
     visit_obj = Visit()
     all_visits = visit_obj.retrieve_all_visits()
+    secondary_icd9_codes_obj = Secondary_ICD_9()
+    all_icd9_codes = secondary_icd9_codes_obj.retrieve_all_ICD_9()
+
+
     x = 0
     for visit in all_visits:
-        pat = create_patient_dict(visit, settings, dictionaries)
-        if (x == 1):
-            pprint._sorted = lambda x:x
-            pprint.pprint(pat)
-            return 1
-        x += 1
-
-    #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
-    for pat in real_patient_generator(src=xml_src, max_patients=max_patients):
-        pat = realPatient(pat)
-        if not fix_vocab:
-            for w in set(pat['Text'].split('|')):
-                if prefix(w) in realtime_prefixes:
-                    vocab[w] += 1
+        pat = create_patient_dict(visit, settings, dictionaries, all_icd9_codes)
 
         index = pat['index']
         for w in set(pat['Text'].split('|')):
             word_index[w].append(index)
 
-        print >>visitIDs,  index
-        patients.append(index)
-        if len(patients) % 100 == 0:
-            print len(patients)
-            sys.stdout.flush()
-    visitIDs.close()
+
+
+        # if (x == 1):
+        #     pprint._sorted = lambda x:x
+        #     pprint.pprint(pat)
+        #     return 1
+        # x += 1
+
+    #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
+    # for pat in real_patient_generator(src=xml_src, max_patients=max_patients):
+    #     pat = realPatient(pat)
+    #     if not fix_vocab:
+    #         for w in set(pat['Text'].split('|')):
+    #             if prefix(w) in realtime_prefixes:
+    #                 vocab[w] += 1
+
+    #     index = pat['index']
+    #     for w in set(pat['Text'].split('|')):
+    #         word_index[w].append(index)
+
+    #     print >>visitIDs,  index
+    #     patients.append(index)
+    #     if len(patients) % 100 == 0:
+    #         print len(patients)
+    #         sys.stdout.flush()
+    #visitIDs.close()
 
     print 'done with round 1'
     sys.stdout.flush()

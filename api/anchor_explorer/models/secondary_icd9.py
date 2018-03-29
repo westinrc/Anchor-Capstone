@@ -14,8 +14,8 @@ class Secondary_ICD_9(object):
         Secondary_ICD_9.conn.commit()
 
     @staticmethod
-    def retrieve_by_index(index):
-        sql = "SELECT * FROM ICD_9 WHERE `index` = " + index
+    def retrieve_all_ICD_9():
+        sql = "SELECT `index`, GROUP_CONCAT(code SEPARATOR ', ') AS codes FROM ICD_9 GROUP BY `index`;"
         Secondary_ICD_9.cursor.execute(sql)
         result = Secondary_ICD_9.cursor.fetchall()
         return result
