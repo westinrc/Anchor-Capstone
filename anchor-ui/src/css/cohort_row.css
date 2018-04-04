@@ -1,0 +1,7 @@
+.selected {
+	background: #5bc0de;
+}
+
+.deselected {
+	background: white;
+}
