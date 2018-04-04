@@ -140,12 +140,12 @@ def build_diagnosis(dictionaries, prefix, visit, all_icd9_codes_indexed):
     visit_index = visit['index']
     secondary_icd9_codes = all_icd9_codes_indexed[visit_index]
 
-    print(secondary_icd9_codes)
-    
     diagnoses = []
     if (secondary_icd9_codes is not None):
-        for code in secondary_icd9_codes['codes']:
+        codes = [code.strip() for code in secondary_icd9_codes['codes'].split(',')]
+        for code in codes:
             dictionary = {}
+
             try:
                 dictionary['disp'] = dictionaries[prefix][prefix + code]
                 dictionary['repr'] = prefix + code
@@ -249,6 +249,7 @@ def preprocess(max_patients):
     visitShelf = shelve.open('visitShelf', 'n')
     wordShelf = shelve.open('wordShelf', 'n')
     visitIDs = file('visitIDs', 'w')
+    visitIDs = open("visitIDs", "w")
     word_index = defaultdict(list)
     patients = []
     pool = Pool(4)
@@ -272,6 +273,18 @@ def preprocess(max_patients):
         for w in set(pat['Text'].split('|')):
             word_index[w].append(index)
 
+        if (x == 1):
+            print(pat)
+            
+            return 1
+        x += 1
+
+        print >> visitIDs, index
+        patients.append(index)
+        if (len(patients) % 10000):
+            print(len(patients))
+            sys.stdout.flush()
+    visitIDs.close()
 
 
         # if (x == 1):
