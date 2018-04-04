@@ -13,15 +13,15 @@ from models.secondary_icd9 import Secondary_ICD_9
 from models.code_names import Code_Names
 from models.code_edges import Code_Edges
 
-conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
+conn = pymysql.connect(host='127.0.0.1', user='capstone', passwd='Capstone_Password', db='capstone_DB')
 cursor = conn.cursor()
 
 def upload_pitt_data(pitt_file):
     if pitt_file is not None:
+        current_index = 0
         for line in pitt_file:
             split_parts = line.split("|")
 
-            current_index = int(split_parts[0])
             primary_icd_9 = split_parts[4]
             note_type = split_parts[2]
             chief_complaint = split_parts[3]
@@ -37,6 +37,7 @@ def upload_pitt_data(pitt_file):
                 if code != '':
                     new_secondary_icd_9_entry = Secondary_ICD_9(current_index, code)
                     new_secondary_icd_9_entry.store()
+                    
 
             current_index = current_index + 1
         return "Success!"
@@ -131,7 +132,6 @@ def build_structured_rep(data_type):
 def clear_tables():
     cursor = conn.cursor()
     cursor.execute("DELETE FROM visit;")
-    cursor.execute("DELETE FROM patient;")
     cursor.execute("DELETE FROM ICD_9;")
     cursor.execute("DELETE FROM code_names;")
     cursor.execute("DELETE FROM code_edges;")
