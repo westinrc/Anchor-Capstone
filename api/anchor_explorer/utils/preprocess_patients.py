@@ -172,6 +172,8 @@ def create_patient_dict(visit, settings, dictionaries, all_icd9_codes_indexed):
                 pat[field_name] = ''
                 if field_name == 'Note':
                     note_text = visit['note_text']
+                    note_text.replace('\\n', '\n')
+                    note_text.replace('\\t', '\t')
                     pat[field_name] = note_text
                     remove_chars = ['\n', '\\n', '\t', '\\t']
                     for char in remove_chars:
