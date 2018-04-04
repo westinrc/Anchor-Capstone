@@ -20,17 +20,19 @@ class App extends Component {
 			markedPatientCount: 0,
 			selectedAnchor: 'none',
 			selectedPatient: 'none',
-			jokesArr: []
+			jokesArr: [],
+			displayPatientData: ''
 		};
 		this.searchCallBack = this.searchCallBack.bind(this);
 	}
 
 	searchCallBack(dataFromChild) {
 		console.log('data from child ' + dataFromChild);
-		this.setState({jokesArr: dataFromChild});
+		// this.setState({jokesArr: dataFromChild});
 		// Use the data from the child here.
+		this.setState({displayPatientData: dataFromChild});
 	}
-	
+
 	render() {
 		return (
 			<div>
@@ -42,7 +44,7 @@ class App extends Component {
 							<Cohort></Cohort>
 						</div>
 						<div className='col-md-9'>
-							<PatientList></PatientList>
+							<PatientList callbackFromParent={this.searchCallBack}></PatientList>
 						</div>
 					</div>
 					<div className='row'>
@@ -51,9 +53,9 @@ class App extends Component {
 							<Filters></Filters>
 						</div>
 						<div className='col-md-9'>
-							<AnchorInput callbackFromParent={this.searchCallBack}></AnchorInput>
+							<AnchorInput></AnchorInput>
 							<br />
-							<PatientView passingJokeToChild={this.state.jokesArr}></PatientView>
+							<PatientView passingPatientToChild={this.state.displayPatientData}></PatientView>
 						</div>
 					</div>
 					<br />

@@ -5,7 +5,7 @@ class PatientView extends Component {
 	constructor() {
 		super();
 		this.state = {
-			jokesReceived: [],
+			patientReceived: '',
 			result: ''
 		};
 	}
@@ -13,14 +13,12 @@ class PatientView extends Component {
 	componentWillReceiveProps(nextProps) {
 		console.log(JSON.stringify(nextProps));
 		this.setState({
-			jokesReceived: nextProps.passingJokeToChild
+			patientReceived: nextProps.passingPatientToChild
 		}, () => {
-			this.state.jokesReceived.map((joke) => {
 				this.setState({
-					result: this.state.result + joke + '\n'
+					result: this.state.patientReceived + '\n'
 				});
 				return 0;
-			});	
 		});
 	}
 
@@ -31,7 +29,7 @@ class PatientView extends Component {
 					<h3 className='no-margin'>Detailed Patient View</h3>
 				</div>
 				<div className='panel-body fixed-panel'>
-					<textarea value={this.state.result} disabled name='patient-area'></textarea>
+					<textarea value={this.state.patientReceived} disabled name='patient-area'></textarea>
 				</div>
 			</div>
 		);
