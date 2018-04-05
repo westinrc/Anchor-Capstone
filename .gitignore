@@ -1,3 +1,7 @@
 *.pyc
-api/anchor_explorer/icd9/*
+api/anchor_explorer/icd9
+api/anchor_explorer/structures
+api/anchor_explorer/visitIDs
+api/anchor_explorer/*.db
+api/files
 *.DS_Store

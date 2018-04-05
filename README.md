@@ -13,6 +13,7 @@
 * [Versioning](#versioning)
 * [Authors](#authors)
 * [License](#license)
+* [Development Steps](#development-steps)
 
 ## Getting Started
 
@@ -119,21 +120,30 @@ Start The Development Server
 
 ```python
 cd api/anchor_explorer
+
 python anchor_explorer.py
 ```
 
-Loading the pitt data
-http://0.0.0.0:[localhost]/upload-pitt-delimited
-body must have form data of file pitt-delimeted (with that name!)
+In order to hit the endpoints you will need to use a program like [Postman](https://www.getpostman.com/)
 
-Hit the load-icd9-structure
-http://0.0.0.0:[localhost]/load-icd9-structure
+`5000 is the typical port, but could differ`
 
-Build the representation (roughly 5min)
-http://0.0.0.0:[localhost]/build-structured-rep
+Loading the pitt data (approx. 5 minutes) [Method : POST] </br>
+http://0.0.0.0:5000/upload-pitt-delimited </br>
+body must have form datsa of file pitt-delimeted (with that name!)
 
-Pre Process Patients
-http://0.0.0.0:[localhost]/preprocess-patients
+Hit the load-icd9-structure [Method : POST] </br>
+http://0.0.0.0:5000/load-icd9-structure
+
+Build the representation (approx. 5 minutes) [Method : POST] </br>
+http://0.0.0.0:5000/build-structured-rep </br>
+body must have a json object to be passed i.e.:
+{
+    "datatype": "code"
+}
+
+Pre Process Patients </br>
+http://0.0.0.0:5000/preprocess-patients </br>
 pass the max_patients in via a json object i.e.:
 {
     "max_patients": 93422
@@ -146,3 +156,23 @@ pass the max_patients in via a json object i.e.:
 * wordshelf.db
 * visitshelf.db
 * visitid
+
+### Starting and stopping mysql server locally with brew
+
+```bash
+brew services start mysql
+
+brew servies stop mysql
+```
+
+[Resource for more details on brew services](https://robots.thoughtbot.com/starting-and-stopping-background-services-with-homebrew)
+
+[Resource for more details on writing markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+
+### Connecting to mysql
+
+```bash
+mysql -u capstone -p[password]
+```
+
+note that there is no space between the `-p` and password, do not use any brackets when writing the password.

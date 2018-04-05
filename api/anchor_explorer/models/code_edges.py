@@ -1,7 +1,7 @@
 import pymysql
 
 class Code_Edges(object):
-    conn = pymysql.connect(host='127.0.0.1', user='root', passwd='Capstone_Password', db='capstone_DB')
+    conn = pymysql.connect(host='127.0.0.1', user='capstone', passwd='Capstone_Password', db='capstone_DB')
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     current_index = 1
 

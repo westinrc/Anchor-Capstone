@@ -4,6 +4,7 @@ from utils.settings_update import update_settings
 from utils.data_storage import upload_pitt_data
 from utils.data_storage import load_icd9_structure
 from utils.data_storage import build_structured_rep
+from utils.preprocess_patients import preprocess
 import sys
 import json
 import pymysql
@@ -45,6 +46,13 @@ def build_rep():
     data_type = request_json['datatype']
     build_structured_rep(data_type)
     return "Success"
+
+@app.route('/preprocess-patients', methods=['POST'])
+def preprocess_patients():
+    request_json = request.get_json(force=True)
+    max_patients = request_json['max_patients']
+    result = preprocess(max_patients)
+    return str(result)
 
 @app.route('/endpoint-for-patients', methods=['GET'])
 def send_demo_patients():
