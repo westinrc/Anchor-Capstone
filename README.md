@@ -9,6 +9,7 @@
 * [Getting Started](#getting-started)
     1. [Installing pip](#installing-pip)
     1. [Installing Virtual Environment](#installing-a-virtual-environment)
+    1. [Installing Requirements](#installing-requirements-in-virtual-environment)
 * [Versioning](#versioning)
 * [Authors](#authors)
 * [License](#license)
@@ -78,6 +79,26 @@ To deactvate on any of the aforementioned operatings systems:
 ```bash
 deactivate
 ```
+
+### Installing requirements in virtual environment
+
+These steps only need to be performed the first time that you use a new virtual environment
+
+To install the requirements activate your virtual environment as shown [above](#installing-a-virtual-environment).
+
+navigate to folder api
+
+```bash
+Anchor-Capstone/api
+```
+
+in the terminal run
+
+```bash
+pip intstall -r requirements.txt
+```
+
+At this point you can now continue with the [development steps](#development-steps).
 
 ## Versioning
 
