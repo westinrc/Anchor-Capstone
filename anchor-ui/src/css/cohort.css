@@ -1,0 +1,8 @@
+.fixed-cohort-body {
+	height: 145px;
+	overflow-y: scroll;
+}
+
+.selected {
+	background: #f5f5f5;
+}
