@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Anchor-Capstone
 
 ## GitHub
@@ -176,3 +177,16 @@ mysql -u capstone -p[password]
 ```
 
 note that there is no space between the `-p` and password, do not use any brackets when writing the password.
+||||||| merged common ancestors
+# Anchor-Capstone
+=======
+# Anchor-Capstone
+
+
+# Authors
+Westin Christensen </br>
+Dhalton Huber </br>
+Karl Noss </br>
+Tori Ottenheimer </br>
+Andreas Regus </br>
+>>>>>>> 110a03bbde1297d7af7643ce4873b0d4162096ba
