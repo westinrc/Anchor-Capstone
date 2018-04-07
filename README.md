@@ -124,13 +124,17 @@ cd api/anchor_explorer
 python anchor_explorer.py
 ```
 
+## Set up the database locally
+
 In order to hit the endpoints you will need to use a program like [Postman](https://www.getpostman.com/)
+
+You will want to follow these in order to setup the data.
 
 `5000 is the typical port, but could differ`
 
 Loading the pitt data (approx. 5 minutes) [Method : POST] </br>
 http://0.0.0.0:5000/upload-pitt-delimited </br>
-body must have form datsa of file pitt-delimeted (with that name!)
+body must have form data of file pitt-delimeted (with that name!)
 
 Hit the load-icd9-structure [Method : POST] </br>
 http://0.0.0.0:5000/load-icd9-structure
@@ -147,6 +151,7 @@ http://0.0.0.0:5000/preprocess-patients </br>
 pass the max_patients in via a json object i.e.:
 {
     "max_patients": 93422
+    "fix_vocab": false
 }
 
 ### DO NOT PUSH THESE FILES

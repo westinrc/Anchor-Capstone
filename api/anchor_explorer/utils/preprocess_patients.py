@@ -202,7 +202,7 @@ def create_patient_dict(visit, settings, dictionaries, all_icd9_codes_indexed):
         pat['Text'] = "|".join(lowered_split_text)
     return pat
 
-def preprocess(max_patients):
+def preprocess(max_patients, fix_vocab):
 
     # if sys.argv[1] == 'test':
     #     txt = ' '.join(sys.argv[2:])

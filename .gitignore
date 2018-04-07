@@ -5,3 +5,4 @@ api/anchor_explorer/visitIDs
 api/anchor_explorer/*.db
 api/files
 *.DS_Store
+.vscode
