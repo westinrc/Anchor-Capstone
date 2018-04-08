@@ -126,6 +126,35 @@ python anchor_explorer.py
 
 ## Set up the database locally
 
+1. First you will need to install and set up mySQL on your machine [mac instructions](https://dev.mysql.com/doc/refman/5.6/en/osx-installation-pkg.html), [windows instructions](https://dev.mysql.com/doc/refman/5.7/en/windows-installation.html)
+1. Once you have installed this software you will need to create an admin user with the following information
+
+```txt
+username: capstone
+password: Capstone_Password
+```
+
+You should be able to accomplish this as such, login to the database with your root username and password and run the following commands
+
+```sql
+CREATE USER 'capstone'@'%' IDENTIFIED BY 'Capstone_Password';
+GRANT ALL PRIVILEGES ON *.* TO 'capstone'@'%'
+```
+
+This command is creating a user 'capstone', with permissions to all databases.
+
+Now you will be able to navigate to the database directory of the project containing db_mySQL.sql
+
+Once you have setup your mySQL as specified above, and have navigated to the correct folder you will need to run the following command
+
+```bash
+mysql -u capstone -pCapstone_Password < db_mySQL.sql
+```
+
+Now you will have a database set up that we will be loading the pitt delimited data in the following steps.
+
+### Hitting our endpoints
+
 In order to hit the endpoints you will need to use a program like [Postman](https://www.getpostman.com/)
 
 You will want to follow these in order to setup the data.
