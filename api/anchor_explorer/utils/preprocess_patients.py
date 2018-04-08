@@ -48,7 +48,7 @@ def randomString(length=16):
 def randomText(length=30):
     return " ".join([random.choice(words) for _ in xrange(length)])
 
-vocab = defaultdict(int)
+
 
 def represent(w, prefix):
     return (prefix+w).lower().strip(string.punctuation)
@@ -204,25 +204,9 @@ def create_patient_dict(visit, settings, dictionaries, all_icd9_codes_indexed):
 
 def preprocess(max_patients, fix_vocab):
 
-    # if sys.argv[1] == 'test':
-    #     txt = ' '.join(sys.argv[2:])
-    #     print process(txt, "", "text", None)
-
-    
-    # try:
-    #     max_patients = int(sys.argv[1])
-    #     xml_src = sys.argv[2] 
-    #     settings = sys.argv[3]
-    # except:
-    #     print "usage: real_patients.py numPatients srcFile settings"
-    #     sys.exit()
-
     settings = 'utils/icd9_settings/settings.xml'
+    vocab = defaultdict(int)
 
-    if 'fix_vocab' in sys.argv:
-        fix_vocab = True
-    else:
-        fix_vocab = False
 
     dictionaries = {}
     for datum in ET.parse(settings).findall('dataTypes/datum'):
@@ -253,6 +237,8 @@ def preprocess(max_patients, fix_vocab):
     word_index = defaultdict(list)
     patients = []
     pool = Pool(4)
+    patientDicts = []
+
 
     # ******* NEW CODE ********
     visit_obj = Visit()
@@ -269,61 +255,45 @@ def preprocess(max_patients, fix_vocab):
     for visit in all_visits:
         pat = create_patient_dict(visit, settings, dictionaries, all_icd9_codes_indexed)
 
+        if not fix_vocab:
+            for w in set(pat['Text'].split('|')):
+                if prefix(w) in realtime_prefixes:
+                    vocab[w] += 1
+        
+
         index = pat['index']
         for w in set(pat['Text'].split('|')):
             word_index[w].append(index)
 
-        if (x == 1):
-            print(pat)
+        #Used for testing
+        if (x == max_patients):
+            break
             
-            return 1
+            
         x += 1
+
+        patientDicts.append(pat)
 
         print >> visitIDs, index
         patients.append(index)
-        if (len(patients) % 10000):
+        if (len(patients) % 10000 == 0):
             print(len(patients))
             sys.stdout.flush()
     visitIDs.close()
 
 
-        # if (x == 1):
-        #     pprint._sorted = lambda x:x
-        #     pprint.pprint(pat)
-        #     return 1
-        # x += 1
-
-    #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
-    # for pat in real_patient_generator(src=xml_src, max_patients=max_patients):
-    #     pat = realPatient(pat)
-    #     if not fix_vocab:
-    #         for w in set(pat['Text'].split('|')):
-    #             if prefix(w) in realtime_prefixes:
-    #                 vocab[w] += 1
-
-    #     index = pat['index']
-    #     for w in set(pat['Text'].split('|')):
-    #         word_index[w].append(index)
-
-    #     print >>visitIDs,  index
-    #     patients.append(index)
-    #     if len(patients) % 100 == 0:
-    #         print len(patients)
-    #         sys.stdout.flush()
-    #visitIDs.close()
-
     print 'done with round 1'
     sys.stdout.flush()
     
+    # Searches vocab dict and creates a list of words that occurred more than 40 times
     if not fix_vocab:
         vocab = [w for w in vocab if vocab[w] > 40]
         inv_vocab = dict(zip(vocab, xrange(len(vocab))))
     else:
+        # Breaks, may need to add our own vocab.pk file for this to work
         vocab,inv_vocab,_, = pickle.load(file('vocab.pk'))
 
-    #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
-    for n, pat in enumerate(real_patient_generator(src=xml_src, max_patients=max_patients)):
-        pat = realPatient(pat)
+    for n, pat in enumerate(patientDicts):
         txt = set(pat['Text'].split('|'))
         m =  sparse.dok_matrix((1,len(vocab)))
         for w in txt:
@@ -335,7 +305,26 @@ def preprocess(max_patients, fix_vocab):
             print n
             sys.stdout.flush()
 
+        #NOTE: Shelf keeps running out of space here. Need to find a better way of storing the patient dictionaries
         visitShelf[index] = pat
+        
+
+
+    #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
+    # for n, pat in enumerate(real_patient_generator(src=xml_src, max_patients=max_patients)):
+    #     pat = realPatient(pat)
+    #     txt = set(pat['Text'].split('|'))
+    #     m =  sparse.dok_matrix((1,len(vocab)))
+    #     for w in txt:
+    #         if w in inv_vocab:
+    #             m[0,inv_vocab[w]] = 1
+    #     pat['sparse_X'] = m
+    #     index = pat['index']
+    #     if n % 100 == 0:
+    #         print n
+    #         sys.stdout.flush()
+
+    #     visitShelf[index] = pat
     
     print 'done with round 2'
     sys.stdout.flush()
@@ -353,4 +342,7 @@ def preprocess(max_patients, fix_vocab):
     inv_vocab = dict(zip(vocab, xrange(len(vocab))))
     display_vocab = [remove_prefix(w)+' ' for w in vocab]
     pickle.dump((vocab, inv_vocab, display_vocab), file('vocab.pk', 'w'))
+
+    visit_shelf = shelve.open('visitShelf', 'r')
+
 

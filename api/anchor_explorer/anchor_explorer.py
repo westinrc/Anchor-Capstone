@@ -51,7 +51,7 @@ def build_rep():
 def preprocess_patients():
     request_json = request.get_json(force=True)
     max_patients = request_json['max_patients']
-	fix_vocab = request_json['fix_vocab']
+    fix_vocab = request_json['fix_vocab']
     result = preprocess(max_patients, fix_vocab)
     return str(result)
 
