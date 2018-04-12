@@ -12,16 +12,10 @@ import xml.etree.ElementTree as ET
 from Parsing import *
 import re
 from models.visit import Visit
+from models.patient_dicts import Patient_dicts
 from models.secondary_icd9 import Secondary_ICD_9
+from models.word_indexes import Word_indexes
 import pprint
-
-def noRepresent(w):
-    return False
-    
-def noDisplay(w):
-    if 'bigram_' in w:
-        return True
-    return False
 
 def prefix(w):
     if '_' in w:
@@ -29,111 +23,12 @@ def prefix(w):
     else:
         return ""
 
-def process(orig_txt, prefix, datatype, display):
-    if datatype == 'text':
-        return parse_text(orig_txt, prefix)
-    else:
-        ret = []
-        for t in orig_txt.split():
-            try:
-                ret.append({'disp':dictionaries[prefix][prefix+t], 'repr':[prefix+t]})
-            except:
-                ret.append({'disp':prefix+t, 'repr':[prefix+t]})
-        return ret
-
-    
-def randomString(length=16):
-    return "".join([random.choice(string.letters) for _ in xrange(length)])
-
-def randomText(length=30):
-    return " ".join([random.choice(words) for _ in xrange(length)])
-
-
-
-def represent(w, prefix):
-    return (prefix+w).lower().strip(string.punctuation)
-
-def xmlReadVisit(f):
-    data = []
-    l = f.readline()
-    if l == "":
-        return None
-
-    if not 'visit' in l:
-        print 'error parsing', l
-        assert 0
-    data.append(l)
-    while not '</visit>' in l:
-        l = f.readline()
-        data.append(l)
-    data = "".join(data)
-    return shallow_parse_XML(data)
-
-
-class real_patient_generator:
-    def __init__(self, src, max_patients):
-        self.input = src
-        self.max_patients = max_patients
-        self.n = 0
-        self.f = file(self.input)
-    
-    def __iter__(self):
-        return self
-
-    def next(self):
-        if self.n < self.max_patients:
-            pat = xmlReadVisit(self.f)
-            if pat == None:
-                raise StopIteration()
-            self.n += 1
-            return pat
-        else:
-            self.f.close()
-            raise StopIteration()
 
 def remove_prefix(w):
     if '_' in w:
         return w.split('_', 1)[1]
     else:
         return w
-
-def token((disp, repr)):
-    return {'disp':disp, 'repr':repr}
-
-def realPatient(pat):
-    global vocab
-    
-    pat['Text'] = ""
-    for datum in ET.parse(settings).findall('dataTypes/datum'):
-        for field in datum.findall('field'):
-
-            try:
-                content = ET.fromstring(pat[field.attrib['name']])
-            except Exception, e:
-                #print e
-                tag = field.attrib['name']
-                pat[tag] = "<"+tag+">?</"+tag+">"
-                content = ET.fromstring("<"+tag+"></"+tag+">")
-            tokenization = []
-
-            for entry in content.findall(field.attrib['path']):
-
-                txt = entry.text
-                if txt == None:
-                    continue
-
-                tokenization += process(txt, datum.attrib['prefix'], datum.attrib['type'], display=None)
-
-            if not field.attrib['name']+'_parsed' in pat:
-                pat[field.attrib['name']+'_parsed'] = []
-
-            pat[field.attrib['name']+'_parsed'] += tokenization
-            pat['Text'] += "|".join(['|'.join(t['repr']) for t in tokenization]) + '|'
-
-    
-    pat['index'] = ET.fromstring(pat['index']).text
-
-    return pat
 
 
 def build_diagnosis(dictionaries, prefix, visit, all_icd9_codes_indexed):
@@ -230,8 +125,7 @@ def preprocess(max_patients, fix_vocab):
         if datum.attrib['realtime'].lower() == "true":
             realtime_prefixes.add(datum.attrib['prefix'])
 
-    visitShelf = shelve.open('visitShelf', 'n')
-    wordShelf = shelve.open('wordShelf', 'n')
+
     visitIDs = file('visitIDs', 'w')
     visitIDs = open("visitIDs", "w")
     word_index = defaultdict(list)
@@ -265,11 +159,6 @@ def preprocess(max_patients, fix_vocab):
         for w in set(pat['Text'].split('|')):
             word_index[w].append(index)
 
-        #Used for testing
-        if (x == max_patients):
-            break
-            
-            
         x += 1
 
         patientDicts.append(pat)
@@ -304,45 +193,26 @@ def preprocess(max_patients, fix_vocab):
         if n % 100 == 0:
             print n
             sys.stdout.flush()
-
-        #NOTE: Shelf keeps running out of space here. Need to find a better way of storing the patient dictionaries
-        visitShelf[index] = pat
         
+        patient_db = Patient_dicts(n, str(pat))
+        patient_db.store()
 
 
-    #for pat in pool.imap_unordered(realPatient, real_patient_generator(src=xml_src, max_patients=max_patients), chunksize=100):
-    # for n, pat in enumerate(real_patient_generator(src=xml_src, max_patients=max_patients)):
-    #     pat = realPatient(pat)
-    #     txt = set(pat['Text'].split('|'))
-    #     m =  sparse.dok_matrix((1,len(vocab)))
-    #     for w in txt:
-    #         if w in inv_vocab:
-    #             m[0,inv_vocab[w]] = 1
-    #     pat['sparse_X'] = m
-    #     index = pat['index']
-    #     if n % 100 == 0:
-    #         print n
-    #         sys.stdout.flush()
 
-    #     visitShelf[index] = pat
-    
     print 'done with round 2'
     sys.stdout.flush()
 
-    visitShelf.close()
     visitIDs.close()
-    for w,s in word_index.items():
-        try:
-            wordShelf[w]=s
-        except:
-            print 'error', w
+    for word, indexes in word_index.items():
+        indexes_str = ",".join(str(x) for x in indexes)
+        word_index = Word_indexes(word, indexes_str)
+        word_index.store()
 
-    wordShelf.close()
     vocab = list(vocab)
     inv_vocab = dict(zip(vocab, xrange(len(vocab))))
     display_vocab = [remove_prefix(w)+' ' for w in vocab]
     pickle.dump((vocab, inv_vocab, display_vocab), file('vocab.pk', 'w'))
+    return "Success!"
 
-    visit_shelf = shelve.open('visitShelf', 'r')
 
 
