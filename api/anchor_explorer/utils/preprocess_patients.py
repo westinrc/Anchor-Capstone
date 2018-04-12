@@ -145,7 +145,6 @@ def preprocess(max_patients, fix_vocab):
         desired_index = icd9_dict['index']
         all_icd9_codes_indexed[desired_index] = icd9_dict
 
-    x = 0
     for visit in all_visits:
         pat = create_patient_dict(visit, settings, dictionaries, all_icd9_codes_indexed)
 
@@ -158,8 +157,6 @@ def preprocess(max_patients, fix_vocab):
         index = pat['index']
         for w in set(pat['Text'].split('|')):
             word_index[w].append(index)
-
-        x += 1
 
         patientDicts.append(pat)
 
