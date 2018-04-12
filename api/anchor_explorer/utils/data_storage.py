@@ -135,4 +135,16 @@ def clear_tables():
     cursor.execute("DELETE FROM ICD_9;")
     cursor.execute("DELETE FROM code_names;")
     cursor.execute("DELETE FROM code_edges;")
+    cursor.execute("DELETE FROM patient_dicts")
+    cursor.execute("DELETE FROM word_indexes")
+    conn.commit()
+
+def clear_dicts():
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM patient_dicts")
+    conn.commit()
+
+def clear_words():
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM word_indexes")
     conn.commit()

@@ -124,13 +124,46 @@ cd api/anchor_explorer
 python anchor_explorer.py
 ```
 
+## Set up the database locally
+
+1. First you will need to install and set up mySQL on your machine [mac instructions](https://dev.mysql.com/doc/refman/5.6/en/osx-installation-pkg.html), [windows instructions](https://dev.mysql.com/doc/refman/5.7/en/windows-installation.html)
+1. Once you have installed this software you will need to create an admin user with the following information
+
+```txt
+username: capstone
+password: Capstone_Password
+```
+
+You should be able to accomplish this as such, login to the database with your root username and password and run the following commands
+
+```sql
+CREATE USER 'capstone'@'%' IDENTIFIED BY 'Capstone_Password';
+GRANT ALL PRIVILEGES ON *.* TO 'capstone'@'%'
+```
+
+This command is creating a user 'capstone', with permissions to all databases.
+
+Now you will be able to navigate to the database directory of the project containing db_mySQL.sql
+
+Once you have setup your mySQL as specified above, and have navigated to the correct folder you will need to run the following command
+
+```bash
+mysql -u capstone -pCapstone_Password < db_mySQL.sql
+```
+
+Now you will have a database set up that we will be loading the pitt delimited data in the following steps.
+
+### Hitting our endpoints
+
 In order to hit the endpoints you will need to use a program like [Postman](https://www.getpostman.com/)
+
+You will want to follow these in order to setup the data.
 
 `5000 is the typical port, but could differ`
 
 Loading the pitt data (approx. 5 minutes) [Method : POST] </br>
 http://0.0.0.0:5000/upload-pitt-delimited </br>
-body must have form datsa of file pitt-delimeted (with that name!)
+body must have form data of file pitt-delimeted (with that name!)
 
 Hit the load-icd9-structure [Method : POST] </br>
 http://0.0.0.0:5000/load-icd9-structure
@@ -147,6 +180,7 @@ http://0.0.0.0:5000/preprocess-patients </br>
 pass the max_patients in via a json object i.e.:
 {
     "max_patients": 93422
+    "fix_vocab": false
 }
 
 ### DO NOT PUSH THESE FILES

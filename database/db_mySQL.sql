@@ -24,7 +24,7 @@ USE `capstone_DB` ;
 DROP TABLE IF EXISTS `ICD_9` ;
 
 CREATE TABLE IF NOT EXISTS `ICD_9` (
-  `index` VARCHAR(120) NOT NULL,
+  `index` INT(11) NOT NULL,
   `code` VARCHAR(45) NULL DEFAULT NULL)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
@@ -36,7 +36,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `code_edges` ;
 
 CREATE TABLE IF NOT EXISTS `code_edges` (
-  `index` VARCHAR(120) NOT NULL,
+  `index` INT(11) NOT NULL,
   `code` VARCHAR(45) NOT NULL,
   `edge` VARCHAR(120) NOT NULL)
 ENGINE = InnoDB
@@ -49,9 +49,22 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `code_names` ;
 
 CREATE TABLE IF NOT EXISTS `code_names` (
-  `index` VARCHAR(120) NOT NULL,
+  `index` INT(11) NOT NULL,
   `code` VARCHAR(45) NOT NULL,
   `name` MEDIUMTEXT NOT NULL)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = latin1;
+
+
+-- -----------------------------------------------------
+-- Table `patient_dicts`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `patient_dicts` ;
+
+CREATE TABLE IF NOT EXISTS `patient_dicts` (
+  `index` INT(11) NOT NULL,
+  `dict` LONGTEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`index`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
@@ -62,7 +75,7 @@ DEFAULT CHARACTER SET = latin1;
 DROP TABLE IF EXISTS `visit` ;
 
 CREATE TABLE IF NOT EXISTS `visit` (
-  `index` VARCHAR(120) NOT NULL,
+  `index` INT(11) NOT NULL,
   `primary_ICD_9` VARCHAR(45) NULL DEFAULT NULL,
   `note_type` VARCHAR(45) NULL DEFAULT NULL,
   `chief_complaint` VARCHAR(120) NULL DEFAULT NULL,
@@ -74,21 +87,14 @@ DEFAULT CHARACTER SET = latin1;
 
 
 -- -----------------------------------------------------
--- Table `patient`
+-- Table `word_indexes`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `patient` ;
+DROP TABLE IF EXISTS `word_indexes` ;
 
-CREATE TABLE IF NOT EXISTS `patient` (
-  `index` VARCHAR(120) NOT NULL,
-  `firstName` VARCHAR(120) NULL DEFAULT NULL,
-  `lastName` VARCHAR(120) NULL DEFAULT NULL,
-  `DOB` DATETIME NULL DEFAULT NULL,
-  PRIMARY KEY (`index`),
-  CONSTRAINT `index_FK`
-    FOREIGN KEY (`index`)
-    REFERENCES `visit` (`index`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
+CREATE TABLE IF NOT EXISTS `word_indexes` (
+  `word` VARCHAR(120) NOT NULL,
+  `index` MEDIUMTEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`word`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = latin1;
 
