@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PatientRow from './patient_row';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+// import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
@@ -10,7 +10,7 @@ class PatientList extends Component {
 	constructor() {
 		super();
 		this.state = {
-			buttons: <div><button className='btn btn-xs btn-success'>+</button> <button className='btn btn-xs btn-danger'>-</button> <button className='btn btn-xs btn-info'>x</button></div>,
+			buttons: <div><button className='btn btn-xs btn-success' type='button' onClick={this.clickedPlus.bind(this)}>+</button> <button className='btn btn-xs btn-danger'>-</button> <button className='btn btn-xs btn-info'>x</button></div>,
 			displayPatient: '',
 			patients: [
 				{ num: 1, age: '?', sex: 'M', name: 'Westin Christensen', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'},
@@ -21,15 +21,15 @@ class PatientList extends Component {
 				{ num: 6, age: 22, sex: 'F', name: 'Megan Jacobson', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'}
 			]
 		};
+		this.clickedPlus = this.clickedPlus.bind(this);
 	}
+
+	clickedPlus() {
+		// alert("you clicked plus");
+		console.log('plus button clicked');
+	}
+
 	render() {
-		const cols=[
-			{dataField:'num', text:'#'},
-			{dataField:'buttons', text:'buttons'},
-			{dataField:'age', text:'Age'},
-			{dataField:'sex', text:'Sex'},
-			{dataField:'name', text:'Name'}
-		];
 		const selectRow = {
 			mode: 'radio',
 			clickToSelect: true,

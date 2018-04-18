@@ -2,6 +2,10 @@
 	padding-left: 0;
 }
 
+Button:focus{
+	outline:0 !important;
+}
+
 .rotate-text {
 	transform: rotate(90deg);
 }

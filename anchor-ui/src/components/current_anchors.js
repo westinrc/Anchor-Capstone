@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import AnchorRow from './anchor_row';
-import BootstrapTable from 'react-bootstrap-table-next';
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
+import 'react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
+// import BootstrapTable from 'react-bootstrap-table-next';
+// import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 import '../css/current_anchors.css';
 
 class CurrentAnchors extends Component {
@@ -17,8 +19,9 @@ class CurrentAnchors extends Component {
 		const selectRow = {
 			mode: 'radio',
 			clickToSelect: true,
-			classes: 'selected',
-			hideSelectColumn: true
+			className: 'selected',
+			hideSelectColumn: true,
+			dataShowHeader: false
 		};
 		return (
 			<div className='panel panel-default'>
@@ -26,13 +29,15 @@ class CurrentAnchors extends Component {
 					<h3 className='no-margin'>Current Anchors</h3>
 				</div>
 				<div className='panel-body fixed-anchor-body text-left'>
-				<BootstrapTable
-					keyField='name' data={this.state.rowAnchor} columns={cols}
+				<BootstrapTable data={this.state.rowAnchor}
 					hover
+					selectRow={selectRow}
 					condenced
 					bordered={false}
-					selectRow={selectRow}
-				/>
+					height='110px'
+				>
+					<TableHeaderColumn isKey dataField='name'>Anchor Name</TableHeaderColumn>
+				</BootstrapTable>
 				</div>
 				<div className='panel-footer'>
 					<div className='btn-group'>
