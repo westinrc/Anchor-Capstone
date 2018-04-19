@@ -13,15 +13,28 @@ class PatientList extends Component {
 			buttons: <div><button className='btn btn-xs btn-success' type='button' onClick={this.clickedPlus.bind(this)}>+</button> <button className='btn btn-xs btn-danger'>-</button> <button className='btn btn-xs btn-info'>x</button></div>,
 			displayPatient: '',
 			patients: [
-				{ num: 1, age: '?', sex: 'M', name: 'Westin Christensen', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'},
-				{ num: 2, age: 26, sex: 'F', name: 'Alli Jacobson', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'},
-				{ num: 3, age: 21, sex: 'F', name: 'Tori Ottenheimer', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'},
-				{ num: 4, age: 19, sex: 'M', name: 'Cadin Christensen', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'},
-				{ num: 5, age: 18, sex: 'F', name: 'Jessie Christensen', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'},
-				{ num: 6, age: 22, sex: 'F', name: 'Megan Jacobson', comment: 'lalalallalalalala', diagnosis: 'aaaa', note: 'note here', icd9P: '20', icd9S: '20, 10, 30'}
-			]
+				{ index: 1, Age: '?', Sex: 'M', Diagnosis: 'aaaa', Note: 'note here'},
+				{ index: 2, Age: 26, Sex: 'F', Diagnosis: 'aaaa', Note: 'note here'},
+				{ index: 3, Age: 21, Sex: 'F', Diagnosis: 'aaaa', Note: 'note here'},
+				{ index: 4, Age: 19, Sex: 'M', Diagnosis: 'aaaa', Note: 'note here'},
+				{ index: 5, Age: 18, Sex: 'F', Diagnosis: 'aaaa', Note: 'note here'},
+				{ index: 6, Age: 22, Sex: 'F', Diagnosis: 'aaaa', Note: 'note here'}
+			],
+			anchorPatients: []
 		};
 		this.clickedPlus = this.clickedPlus.bind(this);
+	}
+
+	componentWillReceiveProps(nextProps) {
+		console.log(JSON.stringify(nextProps));
+		this.setState({
+			anchorPatients: nextProps.passingPatients
+		}, () => {
+				this.setState({
+					anchorPatients: this.state.passingPatients
+				});
+				return 0;
+		});
 	}
 
 	clickedPlus() {
@@ -40,20 +53,15 @@ class PatientList extends Component {
 		const options = {
 			onRowClick: function(row) {
 				// alert(`You click row id: ${row.name}`);
-				let name = row.name;
-				let age = row.age;
-				let sex = row.sex;
-				let comment = row.comment;
-				let diagnosis = row.diagnosis;
-				let note = row.note;
-				let icd9p = row.icd9P;
-				let icd9s = row.icd9S;
+				let diagnosis = row.Diagnosis;
+				let age = row.Age;
+				let sex = row.Sex;
+				// let diagnosises = row.diagnosis;
+				let note = row.Note;
 				// This is not waiting for the value to be set, this needs to be chained in some way.
 				this.setState({
-					displayPatient: name + ' ' + age + ' ' + sex + ' ' + 'ICD9 Primary:' + icd9p +
+					displayPatient: age + ' ' + sex + ' ' + 'Diagnosis:' + diagnosis +
 					'\n----------------------------\n' +
-					'diagnosis: ' + diagnosis +
-					'\nICD9 Secondary: ' + icd9s +
 					'\nnote: ' + note
 				}, () => {
 					this.props.callbackFromParent(this.state.displayPatient); // This line needs to wait until state is for sure set
@@ -72,7 +80,7 @@ class PatientList extends Component {
 				</div>
 				<div className='panel-body fixed-panel-list text-left'>
 
-				<BootstrapTable data={this.state.patients}
+				<BootstrapTable data={this.state.anchorPatients}
 					hover
 					selectRow={selectRow}
 					options={options}
@@ -80,11 +88,11 @@ class PatientList extends Component {
 					bordered={false}
 					height='170px'
 				>
-					<TableHeaderColumn isKey dataField='num' headerAlign='center' dataAlign='center' width='50'>#</TableHeaderColumn>
+					<TableHeaderColumn isKey dataField='index' headerAlign='center' dataAlign='center' width='100'>#</TableHeaderColumn>
 					<TableHeaderColumn dataField="buttons" dataFormat={buttonFormatter} headerAlign='center' dataAlign='center' width='90'>Buttons</TableHeaderColumn>
-					<TableHeaderColumn dataField='age' headerAlign='center' dataAlign='center' width='50'>Age</TableHeaderColumn>
-					<TableHeaderColumn dataField='sex' headerAlign='center' dataAlign='center' width='50'>Sex</TableHeaderColumn>
-					<TableHeaderColumn dataField='name'>Name</TableHeaderColumn>
+					<TableHeaderColumn dataField='Age' headerAlign='center' dataAlign='center' width='50'>Age</TableHeaderColumn>
+					<TableHeaderColumn dataField='Sex' headerAlign='center' dataAlign='center' width='50'>Sex</TableHeaderColumn>
+					<TableHeaderColumn dataField='Diagnosis'>Diagnosis</TableHeaderColumn>
 				</BootstrapTable>
 				</div>
 			</div>

@@ -23,11 +23,13 @@ class App extends Component {
 			jokesArr: [],
 			displayPatientData: '',
 			anchors: [],
-			currentCohort: ''
+			currentCohort: '',
+			anchorPatients: []
 		};
 		this.searchCallBack = this.searchCallBack.bind(this);
 		this.anchorsFromChild = this.anchorsFromChild.bind(this);
 		this.cohortFromChild = this.cohortFromChild.bind(this);
+		this.patientsFromChild = this.patientsFromChild.bind(this);
 	}
 
 	searchCallBack(dataFromChild) {
@@ -48,6 +50,12 @@ class App extends Component {
 		// Use the data from the child here.
 		this.setState({currentCohort: dataFromChild});
 	}
+	patientsFromChild(dataFromChild) {
+		console.log('data from child ' + dataFromChild);
+		// this.setState({jokesArr: dataFromChild});
+		// Use the data from the child here.
+		this.setState({anchorPatients: dataFromChild});
+	}
 
 	render() {
 		return (
@@ -60,12 +68,12 @@ class App extends Component {
 							<Cohort anchorsFromChild={this.anchorsFromChild} cohortFromChild={this.cohortFromChild}></Cohort>
 						</div>
 						<div className='col-md-9'>
-							<PatientList callbackFromParent={this.searchCallBack}></PatientList>
+							<PatientList passingPatients={this.state.anchorPatients} callbackFromParent={this.searchCallBack}></PatientList>
 						</div>
 					</div>
 					<div className='row'>
 						<div className='col-md-3'>
-							<CurrentAnchors passingAnchors={this.state.anchors}></CurrentAnchors>
+							<CurrentAnchors passingAnchors={this.state.anchors} patientsFromChild={this.patientsFromChild}></CurrentAnchors>
 							<Filters></Filters>
 						</div>
 						<div className='col-md-9'>
