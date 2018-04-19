@@ -14,9 +14,24 @@ class StatsView extends Component {
 			anchoredPatientCount: 0,
 			currentCohort: 'none',
 			markedPatientCount: 0,
-			show: false
+			show: false,
+			passedCohort: ''
 		};
 	}
+
+	componentWillReceiveProps(nextProps) {
+		console.log(JSON.stringify(nextProps));
+		this.setState({
+			passedCohort: nextProps.passingCohort
+		}, () => {
+				this.setState({
+					currentCohort: this.state.passedCohort
+				});
+				console.log(this.state.currentCohort);
+				return 0;
+		});
+	}
+
 	render() {
 		return (
 			<div>
@@ -26,7 +41,7 @@ class StatsView extends Component {
 						<Popover id="popover" title="Stats">
 							<div className='no-padding-left text-left'>
 								<p>
-									Current Cohort is: { this.state.currentCohort}
+									Current Cohort is: { this.state.passedCohort}
 								</p>
 								<p>
 									Anchored Patients: {this.state.anchoredPatientCount}

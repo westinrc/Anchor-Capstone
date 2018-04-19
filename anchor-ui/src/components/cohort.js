@@ -12,7 +12,8 @@ import '../css/cohort.css';
 			this.state = {
 				cohorts: [{name: 'car', anchors: [{anchorName: 'Symptom 1'}, {anchorName: 'Symptom 2'}, {anchorName: 'Symptom 3'}]},
 									{name: 'truck', anchors: [{anchorName: 'Symptom 4'}, {anchorName: 'Symptom 5'}, {anchorName: 'Symptom 6'}]}],
-				CohortAnchors: []
+				CohortAnchors: [],
+				currentCohort: ''
 			};
 		}
 
@@ -26,13 +27,15 @@ import '../css/cohort.css';
 			};
 			const options = {
 				onRowClick: function(row) {
-					// alert(`You click row id: ${row.anchors}`);
 					let anchors = row.anchors;
+					let name = row.name;
 					// This is not waiting for the value to be set, this needs to be chained in some way.
 					this.setState({
-						CohortAnchors: anchors
+						CohortAnchors: anchors,
+						currentCohort: name
 					}, () => {
 						this.props.anchorsFromChild(this.state.CohortAnchors); // This line needs to wait until state is for sure set
+						this.props.cohortFromChild(this.state.currentCohort);
 					});
 				}.bind(this)
 			};
