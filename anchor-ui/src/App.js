@@ -21,9 +21,11 @@ class App extends Component {
 			selectedAnchor: 'none',
 			selectedPatient: 'none',
 			jokesArr: [],
-			displayPatientData: ''
+			displayPatientData: '',
+			anchors: []
 		};
 		this.searchCallBack = this.searchCallBack.bind(this);
+		this.anchorsFromChild = this.anchorsFromChild.bind(this);
 	}
 
 	searchCallBack(dataFromChild) {
@@ -31,6 +33,12 @@ class App extends Component {
 		// this.setState({jokesArr: dataFromChild});
 		// Use the data from the child here.
 		this.setState({displayPatientData: dataFromChild});
+	}
+	anchorsFromChild(dataFromChild) {
+		console.log('data from child ' + dataFromChild);
+		// this.setState({jokesArr: dataFromChild});
+		// Use the data from the child here.
+		this.setState({anchors: dataFromChild});
 	}
 
 	render() {
@@ -41,7 +49,7 @@ class App extends Component {
 				<div className='App container'>
 					<div className='row'>
 						<div className='col-md-3'>
-							<Cohort></Cohort>
+							<Cohort anchorsFromChild={this.anchorsFromChild}></Cohort>
 						</div>
 						<div className='col-md-9'>
 							<PatientList callbackFromParent={this.searchCallBack}></PatientList>
@@ -49,7 +57,7 @@ class App extends Component {
 					</div>
 					<div className='row'>
 						<div className='col-md-3'>
-							<CurrentAnchors></CurrentAnchors>
+							<CurrentAnchors passingAnchors={this.state.anchors}></CurrentAnchors>
 							<Filters></Filters>
 						</div>
 						<div className='col-md-9'>

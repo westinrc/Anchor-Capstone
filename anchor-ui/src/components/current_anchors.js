@@ -10,8 +10,21 @@ class CurrentAnchors extends Component {
 	constructor() {
 		super();
 		this.state = {
-			rowAnchor: [{name: 'car'}, {name: 'truck'}, {name: 'tori'}, {name: 'vehicle'}, {name: 'westin'}, {name: 'dhalton'}, {name: 'richard'}]
+			passedData: [],
+			rowAnchor: []
 		};
+	}
+
+	componentWillReceiveProps(nextProps) {
+		console.log(JSON.stringify(nextProps));
+		this.setState({
+			rowAnchor: nextProps.passingAnchors
+		}, () => {
+				this.setState({
+					rowAnchor: this.state.passingAnchors
+				});
+				return 0;
+		});
 	}
 
 	render() {
@@ -36,7 +49,7 @@ class CurrentAnchors extends Component {
 					bordered={false}
 					height='110px'
 				>
-					<TableHeaderColumn isKey dataField='name'>Anchor Name</TableHeaderColumn>
+					<TableHeaderColumn isKey dataField='anchorName'>Anchor Name</TableHeaderColumn>
 				</BootstrapTable>
 				</div>
 				<div className='panel-footer'>
