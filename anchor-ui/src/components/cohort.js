@@ -11,7 +11,7 @@ import '../css/cohort.css';
 			super();
 			this.state = {
 				cohorts: [
-					{name: 'car', anchors: [
+					{name: 'Cohort 1', anchors: [
 						{anchorName: 'Symptom 1',
 							patients: [
 								{'Age': '?',
@@ -321,7 +321,7 @@ import '../css/cohort.css';
 								'index': 'vid_00010'}
 							]
 						}]},
-					{name: 'truck', anchors: [
+					{name: 'Cohort 2', anchors: [
 						{anchorName: 'Symptom 4',
 							patients: [
 								{'Age': '?',
