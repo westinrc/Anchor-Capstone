@@ -11,7 +11,7 @@ class StatsView extends Component {
 		};
 
 		this.state = {
-			anchoredPatientCount: 0,
+			anchoredPatientCount: 13,
 			currentCohort: 'none',
 			markedPatientCount: 0,
 			show: false,
